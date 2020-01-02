@@ -1,0 +1,6 @@
+export default {
+    START_FETCH_BLOG_LIST:'START_FETCH_BLOG_LIST',              //开始请求
+    FETCH_BLOG_LIST_SUCCESS:'FETCH_BLOG_LIST_SUCCESS',          // 请求成功
+    FETCH_BLOG_LIST_FAILED:'FETCH_BLOG_LIST_FAILED',            // 请求失败
+    // CHNAGE_BLOG_LOADING:'CHNAGE_BLOG-LOADING',
+}

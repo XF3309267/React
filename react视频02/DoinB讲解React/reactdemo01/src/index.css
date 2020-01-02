@@ -1,0 +1,10 @@
+body{
+   color: red;
+   background-image: url(assets/01.jpg);
+}
+::placeholder{
+   color:yellow;
+}
+div{
+   display: flex;
+}
