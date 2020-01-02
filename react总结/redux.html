@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="store.dispatch({type:'JIAN',n:2}) "> - </button>
+    <h5 id="countDisPlay" > 10 </h5>
+    <button onclick="store.dispatch({type:'JIA',n:2}) " > + </button>
+    <script>
+        const countDisplay = document.querySelector('#countDisPlay');
+        // console.log(countDisplay.innerHTML);
+        const countState = {
+            count: 5
+        }
+
+        const changeState = (state,action) =>{   // changeState 接收：> state：源数据 、action： 根据 action.type 判断执行哪种操作,并返回修改后的数据，并非在源数据上修改
+            if(!state){
+                return countState
+            }
+            switch(action.type){
+                case 'JIAN':
+                return {
+                    ...state,
+                    count: state.count - action.n
+                }
+                case 'JIA':
+                    return {
+                        ...state,
+                        count:state.count + action.n
+                    }
+                default:
+                    return state
+            }
+        }
+
+         // 注意这里的 createStore() 
+         // 他只接收 外来方法
+         // 并 retrun 出 方法
+        const createStore =  (changeState) =>{ 
+            let state = null
+            const getState = () => state
+            const listeners = []                   
+            const subscribe = (listener) => listeners.push(listener) 
+            // 将一些方法存入 listeners 中。且这些方法是指 要对页面进行渲染数据的方法，(这些方法  是将 源数据 渲染到页面上，且紧跟在 修改数据方法的后面   )
+            // 问：
+            const dispatch = (action) => { // dispatch 会接收一个 方法的特征（action），用以函数内判断应该执行那种方法
+                state = changeState(state,action)   //  changeState  用以判断执行何种 方法，并返回修改后的结果
+                listeners.forEach(listener => listener())   // 将 存于 listeners 的每个方法 都执行一遍
+            }
+
+            dispatch({})
+            return{
+                getState,
+                dispatch,
+                subscribe,
+               
+            }
+        }
+        const store = createStore(changeState)
+
+        const  renderCount = () =>{  
+            //  store.getState().count   这里导致 createStore  中 state 不得不一开始就有值
+                countDisplay.innerHTML = store.getState().count   
+        }
+
+        renderCount()
+        store.subscribe(renderCount)
+        // console.log(store.listeners)
+    </script>
+</body>
+</html>
